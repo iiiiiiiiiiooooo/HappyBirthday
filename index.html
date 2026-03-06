@@ -21,13 +21,30 @@
             overflow: hidden;
         }
 
-        .container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 25px; border-radius: 25px;
-            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
-            text-align: center; max-width: 90%; width: 400px;
-            position: relative;
-        }
+    .container {
+    background: transparent; /* Убираем белый фон */
+    padding: 20px;
+    border-radius: 0;
+    box-shadow: none; /* Убираем тень */
+    text-align: center;
+    max-width: 95%;
+    width: 400px;
+    position: relative;
+    z-index: 10; /* Чтобы контент был выше сердечек */
+}
+
+/* Добавим легкое свечение тексту, чтобы он всегда читался */
+h1, h2, p {
+    color: #d85a7d;
+    text-shadow: 1px 1px 10px rgba(255, 255, 255, 0.8), 
+                 -1px -1px 10px rgba(255, 255, 255, 0.8);
+}
+
+.instruction {
+    color: #a18a8a;
+    text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.9);
+}
+
 
         /* Прогресс-бар */
         .progress-container {
@@ -87,9 +104,118 @@
 
         .typing-text::after { content: "|"; animation: blink 0.7s infinite; color: #d85a7d; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+
+  body::before {
+    content: "❤️";
+    position: random;
+    top: -10%;
+    left: 10%;
+    font-size: 20px;
+    opacity: 0.2;
+    animation: drift 5s infinite linear;
+}
+
+body::after {
+    content: "💖";
+    position: random;
+    bottom: -10%;
+    right: 15%;
+    font-size: 25px;
+    opacity: 0.2;
+    animation: drift 12s infinite linear reverse;
+}
+
+@keyframes drift {
+    from { transform: translateY(0) rotate(0deg); }
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+#next-btn, .start-btn {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(216, 90, 125, 0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(216, 90, 125, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(216, 90, 125, 0); }
+}
+.heart-bg {
+    position: fixed;
+    top: -50px;
+    font-size: 20px;
+    opacity: 0.3;
+    z-index: -1; /* Чтобы они были ЗА карточкой */
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(110vh) rotate(360deg);
+    }
+}
+/* Стили для заряжающегося сердца */
+.charge-heart {
+    font-size: 60px;
+    cursor: pointer;
+    display: inline-block;
+    margin: 20px 0;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    filter: drop-shadow(0 0 10px rgba(216, 90, 125, 0.5));
+    animation: pulseHeart 1.5s infinite;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Пульсация, пока она не начала кликать */
+@keyframes pulseHeart {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); filter: drop-shadow(0 0 20px rgba(216, 90, 125, 0.8)); }
+    100% { transform: scale(1); }
+}
+
+#heart-hint {
+    color: #ff99ac;
+    font-size: 16px;
+    font-weight: bold;
+    height: 24px; /* Чтобы текст не прыгал, когда меняется */
+    text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.9);
+}
+
+
     </style>
 </head>
 <body>
+<script>
+    function createHearts() {
+        const icons = ['❤️', '💖', '💕', '🌸','❤️‍🔥','💚'];
+        for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart-bg';
+                heart.innerText = icons[Math.floor(Math.random() * icons.length)];
+                
+                // Случайная позиция по горизонтали (0-100%)
+                heart.style.left = Math.random() * 100 + 'vw';
+                
+                // Случайный размер (15-30px)
+                heart.style.fontSize = (Math.random() * 15 + 15) + 'px';
+                
+                // Случайная длительность полета (5-10 секунд)
+                const duration = Math.random() * 5 + 5;
+                heart.style.animationDuration = duration + 's';
+                
+                document.body.appendChild(heart);
+                
+                // Удаляем сердечко после пролета, чтобы не копились
+                setTimeout(() => heart.remove(), duration * 1000);
+            }, i * 500); // Появляются по очереди
+        }
+    }
+
+    // Запускаем создание сердечек каждые 3 секунды бесконечно
+    setInterval(createHearts, 3000);
+    createHearts(); // Первый запуск сразу
+</script>
+
 
     <div class="container" id="quiz-container"></div>
 
@@ -115,12 +241,25 @@
                 options: ["В кино", "В парке", "В ресторане", "В гостях"],
                 instruction: "Угадай правильный вариант 🧐"
             },
-     {     text:"go sex?",
+     {     text:"go sex111?",
            type: "single",
            gif: "1.webp",
            options:["yes", "no"],
-           }
+           },
+   
+             {     text:"go sex222?",
+           type: "single",
+           gif: "1.webp",
+           options:["yes", "no"],
+           },
+      
+             {     text:"go sex?",
+           type: "correct",
+           correctAnswer: "no",
+           gif: "1.webp",
+           options:["yes", "no"],
            
+           instruction:"just smile"}
            
             // Добавь свои вопросы дальше...
         ];
@@ -128,23 +267,81 @@
         let currentQuestionIndex = 0;
         let selectedAnswers = new Set();
 
-        // 1. НАЧАЛЬНЫЙ ЭКРАН
-        function showStartScreen() {
-            const container = document.getElementById('quiz-container');
-            container.innerHTML = `
-                <div class="fade-in">
-                    <h1>С Днём Рождения! 🎉</h1>
-                    <div class="gif-container">
-                        <img src="welcome.gif" alt="Welcome" onerror="this.src='https://media.tenor.com/yG5G0t8XqHwAAAAC/cheers.gif'">
-                    </div>
-                    <p>Я подготовил для тебя небольшой сюрприз. Проверь, как хорошо ты меня знаешь и насколько внимательно читаешь мои признания! ❤️</p>
-                    <button class="start-btn" onclick="startQuiz()">Начать приключение ➔</button>
-                </div>
-            `;
+   
+        // 1. НАЧАЛЬНЫЙ ЭКРАН С "ЗАРЯДКОЙ СЕРДЦА"
+function showStartScreen() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = `
+        <div class="fade-in">
+            <h1>Добро пожаловать моя любимка</h1>
+            <p>Чтобы открыть мой сюрприз, тебе нужно доказать свою любовь!</p>
+            
+            <p id="heart-hint">Тапни по сердцу 25 раз ❤️</p>
+            
+            <div id="charge-heart" class="charge-heart" onclick="chargeHeart()">❤️</div>
+        </div>
+    `;
+}
+
+// Логика зарядки на 25 тапов
+let heartClicks = 0;
+const MAX_CLICKS = 25;
+
+function chargeHeart() {
+    heartClicks++;
+    const heart = document.getElementById('charge-heart');
+    const hint = document.getElementById('heart-hint');
+    const remaining = MAX_CLICKS - heartClicks;
+    
+    // Легкая вибрация при каждом тапе
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    // Динамический текст, который меняется в зависимости от прогресса
+    if (remaining > 20) {
+        hint.innerText = `Осталось: ${remaining} 💓`;
+    } else if (remaining > 10) {
+        hint.innerText = `Так держать! Ещё ${remaining} 💗`;
+    } else if (remaining > 5) {
+        hint.innerText = `Уже горячо! Осталось ${remaining} 💖`;
+    } else if (remaining > 1) {
+        hint.innerText = `Почти взрыв! Ещё ${remaining} 🔥`;
+    } else if (remaining === 1) {
+        hint.innerText = `Последний тап!!! 💚`;
+    }
+
+    // Сердце растет плавно (прибавляем по 0.08 к размеру за тап)
+    // К концу оно будет примерно в 2.5 раза больше изначального
+    heart.style.animation = "none"; 
+    heart.style.transform = `scale(${1 + heartClicks * 0.07})`;
+
+    // Когда дошли до 25
+    if (heartClicks >= MAX_CLICKS) {
+        hint.innerText = "Заряжено на 100%! ✨";
+        heart.style.pointerEvents = 'none'; // Блокируем лишние клики
+        
+        
+        // Победная вибрация
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        
+        // Салют
+        if (typeof confetti === 'function') {
+            confetti({
+                particleCount: 80,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff99ac', '#d85a7d', '#ff0000']
+            });
         }
+        
+        // Переход к квизу
+        setTimeout(() => {
+            startQuiz();
+        }, 2000); // Даем секунду полюбоваться взрывом
+    }
+}
 
         function startQuiz() {
-            sendToTelegram("🚀 Она открыла подарок и нажала 'Начать'!");
+            sendToTelegram(" Она !");
             renderQuestion();
         }
 
@@ -178,68 +375,83 @@
             });
         }
 
-        function toggleOption(btn, index) {
-            const q = questions[currentQuestionIndex];
-            if (q.type === "multiple") {
-                if (!selectedAnswers.has(index)) {
-                    selectedAnswers.add(index);
-                    btn.classList.add('selected');
-                    if (navigator.vibrate) navigator.vibrate(40);
-                }
+function toggleOption(btn, index) {
+    const q = questions[currentQuestionIndex];
+    if (q.type === "multiple") {
+        if (selectedAnswers.has(index)) {
+            selectedAnswers.delete(index);
+            btn.classList.remove('selected');
+        } else {
+            selectedAnswers.add(index);
+            btn.classList.add('selected');
+            if (navigator.vibrate) navigator.vibrate(40);
+        }
+    } else {
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        selectedAnswers.clear();
+        selectedAnswers.add(index);
+        btn.classList.add('selected');
+        if (navigator.vibrate) navigator.vibrate(40);
+    }
+}
+
+function checkAndNext() {
+    const q = questions[currentQuestionIndex];
+    const nextBtn = document.getElementById('next-btn');
+    const selectedBtn = document.querySelector('.option-btn.selected');
+    
+    let isCorrect = false;
+    let reportMessage = "";
+
+    if (q.type === "multiple") {
+        if (selectedAnswers.size === q.options.length) {
+            isCorrect = true;
+            // Собираем все ответы в одну строку для отчета
+            const answersText = Array.from(selectedAnswers).map(i => q.options[i]).join(", ");
+            reportMessage = `✅ Прошла 'Все варианты' в вопросе: "${q.text}". \nВыбрано: ${answersText}`;
+        }
+    } else if (q.type === "single" || q.type === "correct") {
+        if (selectedAnswers.size === 1) {
+            if (q.type === "correct" && selectedBtn.innerText !== q.correctAnswer) {
+                isCorrect = false; // Не пускаем, если ответ неверный
             } else {
-                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                selectedAnswers.clear();
-                selectedAnswers.add(index);
-                btn.classList.add('selected');
-                if (navigator.vibrate) navigator.vibrate(40);
+                isCorrect = true;
+                reportMessage = `📩 Ответ на вопрос "${q.text}": ${selectedBtn.innerText}`;
             }
         }
+    }
 
-        function checkAndNext() {
-            const q = questions[currentQuestionIndex];
-            const nextBtn = document.getElementById('next-btn');
-            const selectedBtn = document.querySelector('.option-btn.selected');
-            
-            let isCorrect = false;
-
-            if (q.type === "multiple" && selectedAnswers.size === q.options.length) {
-                isCorrect = true;
-            } else if (q.type === "single" && selectedAnswers.size === 1) {
-                sendToTelegram(`🎁 Выбор: ${selectedBtn.innerText} (${q.text})`);
-                isCorrect = true;
-            } else if (q.type === "correct" && selectedAnswers.size === 1) {
-                if (selectedBtn.innerText === q.correctAnswer) {
-                    isCorrect = true;
-                }
-            }
-
-            if (isCorrect) {
-                currentQuestionIndex++;
-                if (currentQuestionIndex < questions.length) {
-                    renderQuestion();
-                } else {
-                    showFinalScreen();
-                }
-            } else {
-                nextBtn.classList.remove('shake');
-                void nextBtn.offsetWidth; 
-                nextBtn.classList.add('shake');
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-                
-                if (q.type === "multiple" || q.type === "correct") {
-                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-                    selectedAnswers.clear();
-                }
-            }
+    if (isCorrect) {
+        if (reportMessage) sendToTelegram(reportMessage); // Отправляем отчет в ТГ
+        
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            renderQuestion();
+        } else {
+            showFinalScreen();
         }
+    } else {
+        // Ошибка (тряска и вибрация)
+        nextBtn.classList.remove('shake');
+        void nextBtn.offsetWidth; 
+        nextBtn.classList.add('shake');
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        
+        if (q.type === "multiple" || q.type === "correct") {
+            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+            selectedAnswers.clear();
+        }
+    }
+}
+
 
         function sendToTelegram(message) {
-            fetch(`https://api.telegram.org/bot${8200013923:AAFwEaN2_yfH02wnA1415nSWb4Z3zaq5wp8}/sendMessage?chat_id=${962696537}&text=${encodeURIComponent(message)}`);
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`);
         }
 
         function showFinalScreen() {
             const container = document.getElementById('quiz-container');
-            const finalMessage = "Я тебя очень сильно люблю. Твой главный подарок уже ждёт тебя... ❤️";
+            const finalMessage = "Ти самая самая.                                       Я тебя очень сильно люблю. Твой главный подарок уже ждёт тебя... ❤️";
 
             container.innerHTML = `
                 <div class="fade-in">
@@ -262,7 +474,7 @@
                 if (i < finalMessage.length) {
                     document.getElementById("typewriter").innerHTML += finalMessage.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 60);
+                    setTimeout(typeWriter, 120);
                 } else {
                     document.getElementById("final-tg-btn").style.display = "block";
                     document.getElementById("typewriter").classList.remove("typing-text");
@@ -278,3 +490,4 @@
     </script>
 </body>
 </html>
+
