@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>С Днём Рождения! 💖</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe6fa 0%, #ffdfdf 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #5a4a4a;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #d85a7d;
+        }
+
+        .gif-container {
+            min-height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .gif-container img {
+            max-width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            background: transparent; 
+            border: none;
+            box-shadow: none; 
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #ff99ac;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 153, 172, 0.3);
+        }
+
+        button:hover {
+            background-color: #ff758f;
+            transform: scale(1.02);
+        }
+
+        .fade-out {
+            animation: fadeOut 0.4s forwards;
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="quiz-container">
+        </div>
+
+    <script>
+        // === ТВОИ ДАННЫЕ ДЛЯ ТЕЛЕГРАМА ===
+        const BOT_TOKEN = 'СЮДА_ВСТАВЬ_ТОКЕН'; 
+        const CHAT_ID = 'СЮДА_ВСТАВЬ_CHAT_ID';
+
+        // === СПИСОК ВОПРОСОВ (10 штук) ===
+        const questions = [
+            {
+                text: "Привет! Готова к праздничному опросу? ✨",
+                gif: "1.webp", // Убедись, что файл 1.webp лежит в той же папке
+                options: ["Да, погнали!", "Конечно! 🥰"]
+            },
+            {
+                text: "Как бы ты хотела начать вечер?",
+                gif: "1.webp",
+                options: ["Вкусный ужин дома 🍷", "Поход в ресторан 🍝", "Сюрприз! 🎁"]
+            },
+            {
+                text: "Какое сегодня настроение?",
+                gif: "1.webp",
+                options: ["Романтичное 🥰", "Веселое 🥳", "Ленивое 🍕"]
+            },
+            {
+                text: "Выбери напиток вечера:",
+                gif: "1.webp",
+                options: ["Винишко 🍷", "Коктейли 🍹", "Какао ☕", "Шампанское! 🥂"]
+            },
+            {
+                text: "Что будем смотреть?",
+                gif: "1.webp",
+                options: ["Мелодраму 🍿", "Ужастик 👻", "Мультики 🐾"]
+            },
+            {
+                text: "Идеальный десерт для тебя:",
+                gif: "1.webp",
+                options: ["Тортик 🎂", "Чизкейк 🍰", "Мороженое 🍦"]
+            },
+            {
+                text: "Лучшее завершение дня:",
+                gif: "1.webp",
+                options: ["Прогулка 🌙", "Ванна с пеной 🛁", "Массаж ✨"]
+            },
+            {
+                text: "Что тебе сейчас сказать?",
+                gif: "1.webp",
+                options: ["Люблю тебя ❤️", "Ты богиня 😍", "Подарок уже близко! 🎁"]
+            },
+            {
+                text: "Ждешь основной подарок?",
+                gif: "1.webp",
+                options: ["Очень! 🔥", "Терпеливо жду 😊", "Уже бегу открывать! 🚀"]
+            },
+            {
+                text: "Ты ведь знаешь, что ты лучшая?",
+                gif: "1.webp",
+                options: ["Да! 🥰", "Догадываюсь 😉", "Обожаю тебя! ❤️"]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        const container = document.getElementById('quiz-container');
+
+        function renderQuestion() {
+            if (currentQuestionIndex >= questions.length) {
+                showFinalScreen();
+                return;
+            }
+
+            const q = questions[currentQuestionIndex];
+            let buttonsHtml = '';
+            q.options.forEach(option => {
+                buttonsHtml += `<button onclick="handleAnswer('${option.replace(/'/g, "\\'")}')">${option}</button>`;
+            });
+
+            container.innerHTML = `
+                <h2>${q.text}</h2>
+                <div class="gif-container">
+                    <img src="${q.gif}" alt="sticker" onerror="this.src='https://media.tenor.com/a9A1fHjE76oAAAAC/peach-goma.gif'">
+                </div>
+                <div class="options">
+                    ${buttonsHtml}
+                </div>
+            `;
+            
+            container.classList.remove('fade-out');
+        }
+
+        function handleAnswer(answerText) {
+            const currentQText = questions[currentQuestionIndex].text;
+            sendToTelegram(currentQText, answerText);
+
+            container.classList.add('fade-out');
+            
+            setTimeout(() => {
+                currentQuestionIndex++;
+                renderQuestion();
+            }, 400);
+        }
+
+        function sendToTelegram(question, answer) {
+            const message = `🎉 Ответ!\n❓ ${question}\n✅ ${answer}`;
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
+            
+            fetch(url).catch(err => console.log('Ошибка ТГ:', err));
+        }
+
+        function showFinalScreen() {
+            container.innerHTML = `
+                <h2>Ура! Опрос пройден! 🎉</h2>
+                <div class="gif-container">
+                    <img src="https://media.tenor.com/yG5G0t8XqHwAAAAC/cheers.gif" alt="celebration">
+                </div>
+                <p>Все твои пожелания уже у меня. <br><b>С Днем Рождения! ❤️</b></p>
+            `;
+        }
+
+        renderQuestion();
+    </script>
+</body>
+</html>
+
