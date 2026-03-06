@@ -2,215 +2,279 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>С Днём Рождения! 💖</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            outline: none;
+            box-sizing: border-box;
+        }
+
         body {
             background: linear-gradient(135deg, #ffe6fa 0%, #ffdfdf 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            color: #5a4a4a;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; color: #5a4a4a;
+            overflow: hidden;
         }
 
         .container {
             background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 20px;
+            padding: 25px; border-radius: 25px;
             box-shadow: 0 10px 30px rgba(255, 105, 180, 0.2);
-            text-align: center;
-            max-width: 90%;
-            width: 400px;
-            animation: fadeIn 0.8s ease-in-out;
+            text-align: center; max-width: 90%; width: 400px;
+            position: relative;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Прогресс-бар */
+        .progress-container {
+            width: 100%; background-color: #f0f0f0;
+            height: 6px; border-radius: 10px;
+            margin-bottom: 20px; overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; background: linear-gradient(90deg, #ff99ac, #d85a7d);
+            width: 0%; transition: width 0.4s ease;
         }
 
-        h2 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #d85a7d;
-        }
+        h1 { font-size: 26px; color: #d85a7d; margin-bottom: 10px; }
+        h2 { font-size: 22px; color: #d85a7d; margin-top: 10px; margin-bottom: 5px; }
+        p { line-height: 1.5; font-size: 15px; }
+        .instruction { font-size: 13px; color: #a18a8a; margin-bottom: 15px; font-style: italic; }
 
         .gif-container {
-            min-height: 200px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
+            height: 200px; display: flex; justify-content: center;
+            align-items: center; margin-bottom: 20px;
         }
-
         .gif-container img {
-            max-width: 100%;
-            max-height: 200px;
-            object-fit: contain;
-            background: transparent; 
-            border: none;
-            box-shadow: none; 
+            max-width: 100%; max-height: 200px;
+            object-fit: contain; border-radius: 20px;
         }
 
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+        .options { display: grid; grid-template-columns: 1fr; gap: 10px; }
+
+        .option-btn, .start-btn, #next-btn {
+            background-color: #ffffff; color: #ff758f;
+            border: 2px solid #ff99ac; padding: 15px;
+            font-size: 16px; border-radius: 20px;
+            cursor: pointer; transition: all 0.2s ease;
+            font-weight: bold;
         }
 
-        button {
-            background-color: #ff99ac;
-            color: white;
-            border: none;
-            padding: 15px;
-            font-size: 16px;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(255, 153, 172, 0.3);
+        .option-btn.selected { background-color: #ff99ac; color: white; border-color: #ff758f; }
+
+        .start-btn, #next-btn {
+            background-color: #d85a7d;
+            color: white; border: none;
+            width: 100%; margin-top: 20px;
         }
 
-        button:hover {
-            background-color: #ff758f;
-            transform: scale(1.02);
+        .start-btn:active, #next-btn:active { transform: scale(0.95); }
+
+        .shake { animation: shake 0.4s ease-in-out; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(5px); }
         }
 
-        .fade-out {
-            animation: fadeOut 0.4s forwards;
-        }
+        .fade-in { animation: fadeIn 0.6s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
+        .typing-text::after { content: "|"; animation: blink 0.7s infinite; color: #d85a7d; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="container" id="quiz-container">
-        </div>
+    <div class="container" id="quiz-container"></div>
 
     <script>
-        // === ТВОИ ДАННЫЕ ДЛЯ ТЕЛЕГРАМА ===
-        const BOT_TOKEN = 'СЮДА_ВСТАВЬ_ТОКЕН'; 
-        const CHAT_ID = 'СЮДА_ВСТАВЬ_CHAT_ID';
+        // === НАСТРОЙКИ ===
+        const BOT_TOKEN = 'ТВОЙ_ТОКЕН'; 
+        const CHAT_ID = 'ТВОЙ_CHAT_ID';
+        const MY_TELEGRAM = 'ТВОЙ_НИК'; 
 
-        // === СПИСОК ВОПРОСОВ (10 штук) ===
         const questions = [
             {
-                text: "Привет! Готова к праздничному опросу? ✨",
-                gif: "1.webp", // Убедись, что файл 1.webp лежит в той же папке
-                options: ["Да, погнали!", "Конечно! 🥰"]
+                text: "За что я тебя люблю?",
+                type: "multiple", 
+                gif: "1.webp",
+                options: ["Твои глаза", "Твой смех", "Твоя душа", "Твой характер", "Просто за всё!"],
+                instruction: "Нужно отметить каждый пункт 💖"
             },
             {
-                text: "Как бы ты хотела начать вечер?",
-                gif: "1.webp",
-                options: ["Вкусный ужин дома 🍷", "Поход в ресторан 🍝", "Сюрприз! 🎁"]
+                text: "Где мы были на первом свидании?",
+                type: "correct", 
+                correctAnswer: "В парке", 
+                gif: "photo_1.jpg", 
+                options: ["В кино", "В парке", "В ресторане", "В гостях"],
+                instruction: "Угадай правильный вариант 🧐"
             },
-            {
-                text: "Какое сегодня настроение?",
-                gif: "1.webp",
-                options: ["Романтичное 🥰", "Веселое 🥳", "Ленивое 🍕"]
-            },
-            {
-                text: "Выбери напиток вечера:",
-                gif: "1.webp",
-                options: ["Винишко 🍷", "Коктейли 🍹", "Какао ☕", "Шампанское! 🥂"]
-            },
-            {
-                text: "Что будем смотреть?",
-                gif: "1.webp",
-                options: ["Мелодраму 🍿", "Ужастик 👻", "Мультики 🐾"]
-            },
-            {
-                text: "Идеальный десерт для тебя:",
-                gif: "1.webp",
-                options: ["Тортик 🎂", "Чизкейк 🍰", "Мороженое 🍦"]
-            },
-            {
-                text: "Лучшее завершение дня:",
-                gif: "1.webp",
-                options: ["Прогулка 🌙", "Ванна с пеной 🛁", "Массаж ✨"]
-            },
-            {
-                text: "Что тебе сейчас сказать?",
-                gif: "1.webp",
-                options: ["Люблю тебя ❤️", "Ты богиня 😍", "Подарок уже близко! 🎁"]
-            },
-            {
-                text: "Ждешь основной подарок?",
-                gif: "1.webp",
-                options: ["Очень! 🔥", "Терпеливо жду 😊", "Уже бегу открывать! 🚀"]
-            },
-            {
-                text: "Ты ведь знаешь, что ты лучшая?",
-                gif: "1.webp",
-                options: ["Да! 🥰", "Догадываюсь 😉", "Обожаю тебя! ❤️"]
-            }
+     {     text:"go sex?",
+           type: "single",
+           gif: "1.webp",
+           options:["yes", "no"],
+           }
+           
+           
+            // Добавь свои вопросы дальше...
         ];
 
         let currentQuestionIndex = 0;
-        const container = document.getElementById('quiz-container');
+        let selectedAnswers = new Set();
 
-        function renderQuestion() {
-            if (currentQuestionIndex >= questions.length) {
-                showFinalScreen();
-                return;
-            }
-
-            const q = questions[currentQuestionIndex];
-            let buttonsHtml = '';
-            q.options.forEach(option => {
-                buttonsHtml += `<button onclick="handleAnswer('${option.replace(/'/g, "\\'")}')">${option}</button>`;
-            });
-
+        // 1. НАЧАЛЬНЫЙ ЭКРАН
+        function showStartScreen() {
+            const container = document.getElementById('quiz-container');
             container.innerHTML = `
-                <h2>${q.text}</h2>
-                <div class="gif-container">
-                    <img src="${q.gif}" alt="sticker" onerror="this.src='https://media.tenor.com/a9A1fHjE76oAAAAC/peach-goma.gif'">
-                </div>
-                <div class="options">
-                    ${buttonsHtml}
+                <div class="fade-in">
+                    <h1>С Днём Рождения! 🎉</h1>
+                    <div class="gif-container">
+                        <img src="welcome.gif" alt="Welcome" onerror="this.src='https://media.tenor.com/yG5G0t8XqHwAAAAC/cheers.gif'">
+                    </div>
+                    <p>Я подготовил для тебя небольшой сюрприз. Проверь, как хорошо ты меня знаешь и насколько внимательно читаешь мои признания! ❤️</p>
+                    <button class="start-btn" onclick="startQuiz()">Начать приключение ➔</button>
                 </div>
             `;
-            
-            container.classList.remove('fade-out');
         }
 
-        function handleAnswer(answerText) {
-            const currentQText = questions[currentQuestionIndex].text;
-            sendToTelegram(currentQText, answerText);
+        function startQuiz() {
+            sendToTelegram("🚀 Она открыла подарок и нажала 'Начать'!");
+            renderQuestion();
+        }
 
-            container.classList.add('fade-out');
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            selectedAnswers.clear();
+
+            const progress = (currentQuestionIndex / questions.length) * 100;
+            const container = document.getElementById('quiz-container');
+
+            container.innerHTML = `
+                <div class="fade-in">
+                    <div class="progress-container"><div class="progress-bar" style="width: ${progress}%"></div></div>
+                    <h2>${q.text}</h2>
+                    <p class="instruction">${q.instruction}</p>
+                    <div class="gif-container">
+                        <img src="${q.gif}" alt="media" onerror="this.src='https://media.tenor.com/a9A1fHjE76oAAAAC/peach-goma.gif'">
+                    </div>
+                    <div class="options" id="options-grid"></div>
+                    <button id="next-btn" onclick="checkAndNext()">Далее ➔</button>
+                </div>
+            `;
+
+            const grid = document.getElementById('options-grid');
+            q.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = option;
+                btn.onclick = () => toggleOption(btn, index);
+                grid.appendChild(btn);
+            });
+        }
+
+        function toggleOption(btn, index) {
+            const q = questions[currentQuestionIndex];
+            if (q.type === "multiple") {
+                if (!selectedAnswers.has(index)) {
+                    selectedAnswers.add(index);
+                    btn.classList.add('selected');
+                    if (navigator.vibrate) navigator.vibrate(40);
+                }
+            } else {
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                selectedAnswers.clear();
+                selectedAnswers.add(index);
+                btn.classList.add('selected');
+                if (navigator.vibrate) navigator.vibrate(40);
+            }
+        }
+
+        function checkAndNext() {
+            const q = questions[currentQuestionIndex];
+            const nextBtn = document.getElementById('next-btn');
+            const selectedBtn = document.querySelector('.option-btn.selected');
             
-            setTimeout(() => {
+            let isCorrect = false;
+
+            if (q.type === "multiple" && selectedAnswers.size === q.options.length) {
+                isCorrect = true;
+            } else if (q.type === "single" && selectedAnswers.size === 1) {
+                sendToTelegram(`🎁 Выбор: ${selectedBtn.innerText} (${q.text})`);
+                isCorrect = true;
+            } else if (q.type === "correct" && selectedAnswers.size === 1) {
+                if (selectedBtn.innerText === q.correctAnswer) {
+                    isCorrect = true;
+                }
+            }
+
+            if (isCorrect) {
                 currentQuestionIndex++;
-                renderQuestion();
-            }, 400);
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showFinalScreen();
+                }
+            } else {
+                nextBtn.classList.remove('shake');
+                void nextBtn.offsetWidth; 
+                nextBtn.classList.add('shake');
+                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+                
+                if (q.type === "multiple" || q.type === "correct") {
+                    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                    selectedAnswers.clear();
+                }
+            }
         }
 
-        function sendToTelegram(question, answer) {
-            const message = `🎉 Ответ!\n❓ ${question}\n✅ ${answer}`;
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`;
-            
-            fetch(url).catch(err => console.log('Ошибка ТГ:', err));
+        function sendToTelegram(message) {
+            fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`);
         }
 
         function showFinalScreen() {
+            const container = document.getElementById('quiz-container');
+            const finalMessage = "Я тебя очень сильно люблю. Твой главный подарок уже ждёт тебя... ❤️";
+
             container.innerHTML = `
-                <h2>Ура! Опрос пройден! 🎉</h2>
-                <div class="gif-container">
-                    <img src="https://media.tenor.com/yG5G0t8XqHwAAAAC/cheers.gif" alt="celebration">
+                <div class="fade-in">
+                    <div class="progress-container"><div class="progress-bar" style="width: 100%"></div></div>
+                    <h2>С Днём Рождения! 🥳</h2>
+                    <div class="gif-container">
+                        <img src="final_photo.jpg" alt="Мы" onerror="this.src='https://media.tenor.com/Z4wQ7Yg_L0gAAAAC/bubu-dudu-kiss.gif'">
+                    </div>
+                    <p id="typewriter" class="typing-text" style="min-height: 3em; line-height: 1.5; font-weight: 500;"></p>
+                    <button onclick="window.location.href='https://t.me/DIFFIZIT'" 
+                        style="background-color: #24A1DE; color: white; border: none; padding: 15px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; display: none;" 
+                        id="final-tg-btn">
+                        Написать любимому ✨
+                    </button>
                 </div>
-                <p>Все твои пожелания уже у меня. <br><b>С Днем Рождения! ❤️</b></p>
             `;
+
+            let i = 0;
+            function typeWriter() {
+                if (i < finalMessage.length) {
+                    document.getElementById("typewriter").innerHTML += finalMessage.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 60);
+                } else {
+                    document.getElementById("final-tg-btn").style.display = "block";
+                    document.getElementById("typewriter").classList.remove("typing-text");
+                }
+            }
+            typeWriter();
+            sendToTelegram("🏁 ФИНИШ! Она всё прошла! ❤️");
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
 
-        renderQuestion();
+        // Запуск с начального экрана
+        showStartScreen();
     </script>
 </body>
 </html>
-
