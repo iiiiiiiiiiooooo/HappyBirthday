@@ -45,19 +45,34 @@ h1, h2, p {
     text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.9);
 }
 
+ /* Контейнер (подложка) шкалы */
+.progress-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 70px;
+    background-color: #ffffff; /* Теперь она чисто белая */
+    height: 6px; /* Чуть толще, чтобы было лучше видно */
+    border-radius: 10px;
+    overflow: hidden;
+    z-index: 9999;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Легкая тень, чтобы не сливалась с фоном */
+}
 
-        /* Прогресс-бар */
-        .progress-container {
-            width: 100%; background-color: #f0f0f0;
-            height: 6px; border-radius: 10px;
-            margin-bottom: 20px; overflow: hidden;
-        }
-        .progress-bar {
-            height: 100%; background: linear-gradient(90deg, #ff99ac, #d85a7d);
-            width: 0%; transition: width 0.4s ease;
-        }
+/* Сама заполняющая полоска */
+.progress-bar {
+    height: 100%;
+    /* Делаем её зеленой (градиент от светло-зеленого к насыщенному) */
+    background: linear-gradient(90deg, #b3ffab, #12fff7); 
+    /* Если хочешь классический зеленый, используй это: */
+    background: linear-gradient(90deg, #43e97b 0%, #38f9d7 100%);
+    
+    width: 0%;
+    transition: width 0.4s ease;
+}
 
-        h1 { font-size: 26px; color: #d85a7d; margin-bottom: 10px; }
+ 
+   h1 { font-size: 26px; color: #d85a7d; margin-bottom: 10px; }
         h2 { font-size: 22px; color: #d85a7d; margin-top: 10px; margin-bottom: 5px; }
         p { line-height: 1.5; font-size: 15px; }
         .instruction { font-size: 13px; color: #a18a8a; margin-bottom: 15px; font-style: italic; }
@@ -180,13 +195,42 @@ body::after {
     text-shadow: 1px 1px 5px rgba(255, 255, 255, 0.9);
 }
 
+.telegram-btn {
+    background-color: #24A1DE !important; /* Фирменный цвет Telegram */
+    color: white !important;
+    border: none !important;
+    padding: 12px 24px !important;
+    font-size: 16px !important;
+    border-radius: 50px !important; /* Овальная форма */
+    display: flex; /* Меняем на flex */
+    margin-left: auto !important; /* Авто-отступ слева */
+    margin-right: auto !important; /* Авто-отступ справа */
+    width: fit-content; /* Кнопка будет по размеру текста, а не на всю ширину */
+} /* Расстояние между иконкой и текстом */
+    text-decoration: none;
+    font-weight: 500;
+    margin-top: 20px;
+    box-shadow: 0 4px 10px rgba(36, 161, 222, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.telegram-btn:active {
+    transform: scale(0.95);
+}
+
+/* Иконка Telegram через SVG */
+.tg-icon {
+    width: 20px;
+    height: 20px;
+    fill: white;
+}
 
     </style>
 </head>
 <body>
 <script>
     function createHearts() {
-        const icons = ['❤️', '💖', '💕', '🌸','❤️‍🔥','💚'];
+        const icons = ['❤️', '💖', '💕', '🌸','❤️‍🔥','💚','🎁','🥳','💋','🎀','💘'];
         for (let i = 0; i < 20; i++) {
             setTimeout(() => {
                 const heart = document.createElement('div');
@@ -221,47 +265,221 @@ body::after {
 
     <script>
         // === НАСТРОЙКИ ===
-        const BOT_TOKEN = '8200013923:AAFwEaN2_yfH02wnA1415nSWb4Z3zaq5wp8'; 
-        const CHAT_ID = '962696537';
+        const BOT_TOKEN = '08327701617:AAHbB-Zle7IoeCGj_X82pbShQbP-yHlKBAM'; 
+        const CHAT_ID = '0962696537';
         const MY_TELEGRAM = 'DIFFIZIT'; 
 
         const questions = [
             {
-                text: "За что я тебя люблю?",
-                type: "multiple", 
+                text: "Итак начнём",
+                type: "single", 
                 gif: "1.webp",
-                options: ["Твои глаза", "Твой смех", "Твоя душа", "Твой характер", "Просто за всё!"],
-                instruction: "Нужно отметить каждый пункт 💖"
+                options: ["Я готова","Я готова","Я готов","Я готова"],
+                instruction: "Ты готова любимка?"
             },
             {
-                text: "Где мы были на первом свидании?",
-                type: "correct", 
-                correctAnswer: "В парке", 
-                gif: "photo_1.jpg", 
-                options: ["В кино", "В парке", "В ресторане", "В гостях"],
-                instruction: "Угадай правильный вариант 🧐"
+                text: "Кто ты?",
+                type: "multiple", 
+                gif: "lera.jpg", 
+                options: ["Леруська", "Зая любимая", "Лерочка", "Сладенькая булочка"],
+                instruction: "Я уверен ты справишся🤭"
             },
-     {     text:"go sex111?",
-           type: "single",
-           gif: "1.webp",
-           options:["yes", "no"],
+     {     text:"Сначала легкое",
+           type: "correct",
+           correctAnswer:"17",
+           gif: "2.webp",
+           options:["14", "77","17","Та пошел ты"],
+           instruction:"7+7?"
            },
    
-             {     text:"go sex222?",
-           type: "single",
-           gif: "1.webp",
-           options:["yes", "no"],
-           },
+       {     text: "Кто в наших отношениях самый вредный?",
+    type: "correct",
+    correctAnswer: "Я", 
+    gif: "3.webp",
+    options: ["Я", "Конечно ты!", "Мой любовник", "Никто"],
+    instruction: "Только один честный ответ 😈"},
       
-             {     text:"go sex?",
+             {     text:"Угадай на сколько сильно я тебя люблю",
            type: "correct",
-           correctAnswer: "no",
-           gif: "1.webp",
-           options:["yes", "no"],
+           correctAnswer: "Очень сильно умноженно в 100 раз",
+           gif: "4.webp",
+           options:["Не люблю", "Люблю","Очень сильно","Очень сильно умноженно в 100 раз"],
            
-           instruction:"just smile"}
-           
-            // Добавь свои вопросы дальше...
+           instruction:"Думаю это очевидно😏"},
+           {
+              text:"Що мы?",
+              type:"single",
+              gif:"5.webp",
+              options:["Що","Куда","Що мы","Калду"],
+              instruction:"<3"
+           },
+             {
+              text:"Если наши дети будут гетеросексуалами?",
+              type:"correct",
+              correctAnswer:"Чемодан вокзал",
+              gif:"6.webp",
+              options:["Все нормально","Похуй","Чемодан вокзал","Буду любить их"],
+              instruction:"тоооо?"
+           },
+           {
+              text:"Что я в тебе люблю больше всего?",
+              type:"multiple",
+              gif:"7.webp",
+              options:["Душу","Сердце","Сиськи","Доброту"],
+              instruction:"Выбери одно"
+           },            
+     {
+    text: "Кто из нас первый уснет во время просмотра фильма?",
+    type: "correct",
+    correctAnswer: "Естесна я",
+    gif: "8.webp",
+    options: ["Естесна я", "Ты", "Мы оба", "Никто мы досмотрим)"],
+    instruction: "Честный ответ только"
+},
+      { text: "Выбери что нас описывает",
+    type: "multiple",
+    gif: "9.webp",
+    options: ["Биба", "Боба", "Два","Далбоеба"],
+    instruction: "Интересно интересно..."
+},
+     {
+    text: "Где бы ты хотела проснуться завтра утром?",
+    type: "single",
+    gif: "10.webp",
+    options: ["На берегу океана", "С тобой", "Я бы хотела проснутся в 12 часов дня", "В Париже"],
+    instruction: "Выбери мечту 🌅"
+},
+
+     {
+    text: "Ты знаешь что ты самоеее большое счастье в моей жизни?",
+    type: "correct",
+    correctAnswer: "Да я тоже тебя люблю",
+    gif: "11.webp",
+    options: ["Конечно", "Да я тоже тебя люблю", "Знаю","Я тебя обожаю"],
+    instruction: "Самый важный ответ ❤️"
+},
+     
+                {
+              text:"Как правильно поступить??",
+              type:"multiple",
+              gif:"12.webp",
+              options:["Самой активировать прем тг","Выгнать детей если они гетеро"],
+              instruction:"Анука выбери"
+           },
+     
+       {
+    text: "Представь мы на необитаемом острове твои действия?",
+    type: "single",
+    gif: "13.webp",
+    options: ["Буду шипеть ведь я змея", "Буду искать кокосы", "Буду лежать на песке с тобой", "Приручу дикую обезьяну"],
+    instruction: ";)"
+},
+              {
+              text:"После встречи что ты первое зледаешь?",
+              type:"multiple",
+                     gif:"14.webp",
+              options:["Заплачу","Зацелую тебя","Обниму и сломаю тебе ребра","Я буду несколько часов подряд тебяя целоваат"],
+              instruction:"хмм...."
+           },
+     
+                  {
+              text:"Как думаешь какие наушники я хочу себе?",
+              type:"correct",
+              correctAnswer:"Мои ляшки",
+              gif:"15.webp",
+              options:["Аирдопс","Новые самсунги","Мои ляшки","JBL"],
+              instruction:"В каких приятнее слушать музыку мне будет"
+           },
+     
+                  {
+              text:"Как думаешь что бы я в тебе изменил?",
+              type:"correct",
+              correctAnswer:"Мою фамилию",
+              gif:"16.webp",
+              options:["Ты ахуел?","Ничего, я идеальна","Ты явно попутал","Мою фамилию"],
+              instruction:"Надо бы надо..."
+           },
+     
+     {
+    text: "Если бы я стал роботом ты бы меня подзаряжала?",
+    type: "single",
+    gif: "17.webp",
+    options: ["Буду менять батарейки", "Смажу маслом", "Буду использовать как пылесос", "Главное чтобы был вай-фай"],
+    instruction: "🤖"
+},
+                {
+              text:"Я не забыл про тебя и я тебя люблю тебя очень очень очень сильно моя любимая сладостьь",
+              type:"single",
+              gif:"18.webp",
+              options:["Спасибо приятно","Я тебя тоже люблю","Я тебе еще больше раз это скажу лично! Любимый"],
+              instruction:"Правда правда правдааа!!!!🥺🥺🥺🥺❤️"
+           },
+     
+     {
+    text: "Сколько раз в день ты думаешь о нас?",
+    type: "single",
+    gif: "19.webp",
+    options: ["Часто", "Постоянно", "Каждую минуту", "Когда не сплю"],
+    instruction: "Честный ответ позя ❤️"
+},
+     {
+    text: "Если бы мы стали персонажами мультфильма/фильма, кем бы мы были?",
+    type: "single",
+    gif: "20.webp",
+    options: ["Том и Джерри", "Шрек и Фиона", "Лило и Стич", "Аватар и Аватарка"],
+    instruction: "Выбери на твое усмотрение💕💕💕"
+},
+     {
+    text: "Какую мою привычку ты считаешь самой бесячей но терпишь?",
+    type: "single",
+    gif: "21.webp",
+    options: ["То как убегаешь в колде(ты заебал)", "Все привычки", "Мои дурацкие шутки", "Ты идеальный"],
+    instruction: "Минутка искренности... <br> Обещаю не обижаться! 😇"
+},
+     
+     {
+    text: "Что страшнее тебе???",
+    type: "single",
+    gif: "22.webp",
+    options: ["Прыгнуть с парашута", "Отдать свой телефон в руки", "Паук", "Мне ничего не страшно"],
+    instruction: "Давайте падумаем"
+},
+     
+     {
+    text: "Что ты подумала обо мне после первых дней знакомства?",
+    type: "single",
+    gif: "23.webp",
+    options: ["Какой милашка!", "Ебать он Ёбнутый(Мы идеальная пара)", "Надо брать", "Я думала только о еде"],
+    instruction: "Вспомни тот самый день... <br> Только честно! 🙈"
+},
+     
+                {
+              text:"Достаточно ли ты получаешь комплиментов?",
+              type:"single",
+              gif:"24.webp",
+              options:["Мало","Ваще не говоришь","Ну нормально(можно и больше)","Я таю от любого кол-ва"],
+              instruction:"Мне на заметку"
+           },
+     
+                {
+              text:"Ну и наконецто финииш <br> Как думаешь насколько сильно я тебя хочу?",
+              type:"multiple",
+              gif:"25.webp",
+              options:["Сильно💋","На мильен из 10💕","Ну достаточно чтобы я возбудилась😏","Прям так чтобы даже наши ноги в одних носках были🤭"],
+              instruction:"Ура ура ура ура"
+           }
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
         ];
 
         let currentQuestionIndex = 0;
@@ -274,18 +492,18 @@ function showStartScreen() {
     container.innerHTML = `
         <div class="fade-in">
             <h1>Добро пожаловать моя любимка</h1>
-            <p>Чтобы открыть мой сюрприз, тебе нужно доказать свою любовь!</p>
+            <p>Чтобы начать тапни по сердечку</p>
             
-            <p id="heart-hint">Тапни по сердцу 25 раз ❤️</p>
+            <p id="heart-hint">Тапаааай по сердечкуу ❤️</p>
             
-            <div id="charge-heart" class="charge-heart" onclick="chargeHeart()">❤️</div>
+            <div id="charge-heart" class="charge-heart" onclick="chargeHeart()">💗</div>
         </div>
     `;
 }
 
 // Логика зарядки на 25 тапов
 let heartClicks = 0;
-const MAX_CLICKS = 25;
+const MAX_CLICKS = 1;
 
 function chargeHeart() {
     heartClicks++;
@@ -298,13 +516,13 @@ function chargeHeart() {
 
     // Динамический текст, который меняется в зависимости от прогресса
     if (remaining > 20) {
-        hint.innerText = `Осталось: ${remaining} 💓`;
+        hint.innerText = `Осталось: ${remaining} 💋`;
     } else if (remaining > 10) {
-        hint.innerText = `Так держать! Ещё ${remaining} 💗`;
+        hint.innerText = `Так держать! Ещё ${remaining} 💕`;
     } else if (remaining > 5) {
         hint.innerText = `Уже горячо! Осталось ${remaining} 💖`;
     } else if (remaining > 1) {
-        hint.innerText = `Почти взрыв! Ещё ${remaining} 🔥`;
+        hint.innerText = `Давай давай я верю в тебя🥺 ${remaining} 🔥`;
     } else if (remaining === 1) {
         hint.innerText = `Последний тап!!! 💚`;
     }
@@ -312,11 +530,11 @@ function chargeHeart() {
     // Сердце растет плавно (прибавляем по 0.08 к размеру за тап)
     // К концу оно будет примерно в 2.5 раза больше изначального
     heart.style.animation = "none"; 
-    heart.style.transform = `scale(${1 + heartClicks * 0.07})`;
+    heart.style.transform = `scale(${1 + heartClicks * 0.08})`;
 
     // Когда дошли до 25
     if (heartClicks >= MAX_CLICKS) {
-        hint.innerText = "Заряжено на 100%! ✨";
+        hint.innerText = "ХАРРОШ я не сомневался в тебе ✨";
         heart.style.pointerEvents = 'none'; // Блокируем лишние клики
         
         
@@ -341,29 +559,37 @@ function chargeHeart() {
 }
 
         function startQuiz() {
-            sendToTelegram(" Она !");
+            sendToTelegram("Начала");
             renderQuestion();
         }
 
-        function renderQuestion() {
-            const q = questions[currentQuestionIndex];
-            selectedAnswers.clear();
+    function renderQuestion() {
+    const q = questions[currentQuestionIndex];
+    selectedAnswers.clear();
 
-            const progress = (currentQuestionIndex / questions.length) * 100;
-            const container = document.getElementById('quiz-container');
+    const progress = (currentQuestionIndex / questions.length) * 100;
+    const container = document.getElementById('quiz-container');
 
-            container.innerHTML = `
-                <div class="fade-in">
-                    <div class="progress-container"><div class="progress-bar" style="width: ${progress}%"></div></div>
-                    <h2>${q.text}</h2>
-                    <p class="instruction">${q.instruction}</p>
-                    <div class="gif-container">
-                        <img src="${q.gif}" alt="media" onerror="this.src='https://media.tenor.com/a9A1fHjE76oAAAAC/peach-goma.gif'">
-                    </div>
-                    <div class="options" id="options-grid"></div>
-                    <button id="next-btn" onclick="checkAndNext()">Далее ➔</button>
+    container.innerHTML = `
+        <div class="progress-container">
+            <div class="progress-bar" style="width: ${progress}%"></div>
+        </div>
+
+        <div class="fade-in">
+            <div style="margin-top: 50px;"> 
+                <h2>${q.text}</h2>
+                <p class="instruction">${q.instruction}</p>
+                <div class="gif-container">
+                    <img src="$2.webp" alt="media" onerror="this.src='https://media.tenor.com/a9A1fHjE76oAAAAC/peach-goma.gif'">
                 </div>
-            `;
+                <div class="options" id="options-grid"></div>
+                <button id="next-btn" onclick="checkAndNext()">Далее ➔</button>
+            </div>
+        </div>
+    `;
+
+    
+
 
             const grid = document.getElementById('options-grid');
             q.options.forEach((option, index) => {
@@ -377,22 +603,24 @@ function chargeHeart() {
 
 function toggleOption(btn, index) {
     const q = questions[currentQuestionIndex];
-    if (q.type === "multiple") {
+    
+    if (q.type === "correct") {
+        // В "correct" выбираем только один: старый убираем, новый ставим
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        selectedAnswers.clear();
+        selectedAnswers.add(index);
+        btn.classList.add('selected');
+    } else {
+        // В "multiple" и "single" можно выбирать и отменять несколько кнопок
         if (selectedAnswers.has(index)) {
             selectedAnswers.delete(index);
             btn.classList.remove('selected');
         } else {
             selectedAnswers.add(index);
             btn.classList.add('selected');
-            if (navigator.vibrate) navigator.vibrate(40);
         }
-    } else {
-        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-        selectedAnswers.clear();
-        selectedAnswers.add(index);
-        btn.classList.add('selected');
-        if (navigator.vibrate) navigator.vibrate(40);
     }
+    if (navigator.vibrate) navigator.vibrate(40);
 }
 
 function checkAndNext() {
@@ -403,87 +631,169 @@ function checkAndNext() {
     let isCorrect = false;
     let reportMessage = "";
 
+    const now = new Date();
+    const timeString = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const step = `[${currentQuestionIndex + 1}/${questions.length}]`;
+
     if (q.type === "multiple") {
         if (selectedAnswers.size === q.options.length) {
             isCorrect = true;
-            // Собираем все ответы в одну строку для отчета
             const answersText = Array.from(selectedAnswers).map(i => q.options[i]).join(", ");
-            reportMessage = `✅ Прошла 'Все варианты' в вопросе: "${q.text}". \nВыбрано: ${answersText}`;
+            reportMessage = `✍️ ${step} Multiple: "${q.text}"\nВыбрано всё: ${answersText}\n⏱ Время: ${timeString}`;
+        } else {
+            // СБРОС ВЫДЕЛЕНИЯ: если выбрала не всё
+            isCorrect = false;
+            if (selectedAnswers.size > 0) {
+                const partialText = Array.from(selectedAnswers).map(i => q.options[i]).join(", ");
+                sendToTelegram(`⚠️ ${step} Multiple (Сброс!): "${q.text}"\nВыбрала только: ${partialText}\n⏱ Время: ${timeString}`);
+            }
         }
-    } else if (q.type === "single" || q.type === "correct") {
-        if (selectedAnswers.size === 1) {
-            if (q.type === "correct" && selectedBtn.innerText !== q.correctAnswer) {
-                isCorrect = false; // Не пускаем, если ответ неверный
-            } else {
+    } else if (q.type === "single") {
+        if (selectedAnswers.size >= 1) {
+            isCorrect = true;
+            const answersText = Array.from(selectedAnswers).map(i => q.options[i]).join(", ");
+            reportMessage = `🤔 ${step} Single: "${q.text}"\nВыбрано: ${answersText}\n⏱ Время: ${timeString}`;
+        }
+    } else if (q.type === "correct") {
+        if (selectedAnswers.size === 1 && selectedBtn) {
+            if (selectedBtn.innerText === q.correctAnswer) {
                 isCorrect = true;
-                reportMessage = `📩 Ответ на вопрос "${q.text}": ${selectedBtn.innerText}`;
+                reportMessage = `✅ ${step} Correct (Верно!): "${q.text}"\nОтвет: ${selectedBtn.innerText}\n⏱ Время: ${timeString}`;
+            } else {
+                isCorrect = false;
+                sendToTelegram(`❌ ${step} Correct (ОШИБКА!): "${q.text}"\nВыбрала: ${selectedBtn.innerText}\n⏱ Время: ${timeString}`);
             }
         }
     }
 
-    if (isCorrect) {
-        if (reportMessage) sendToTelegram(reportMessage); // Отправляем отчет в ТГ
-        
+     if (isCorrect) {
+        if (reportMessage) sendToTelegram(reportMessage);
         currentQuestionIndex++;
         if (currentQuestionIndex < questions.length) {
             renderQuestion();
         } else {
-            showFinalScreen();
-        }
-    } else {
-        // Ошибка (тряска и вибрация)
-        nextBtn.classList.remove('shake');
-        void nextBtn.offsetWidth; 
-        nextBtn.classList.add('shake');
-        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
-        
-        if (q.type === "multiple" || q.type === "correct") {
-            document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
-            selectedAnswers.clear();
+            // ВМЕСТО финального экрана запускаем экран поздравления
+            showCongratulationScreen(); 
         }
     }
-}
+
+        
+        // Очищаем выделение кнопок визуально и в памяти
+        document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+        selectedAnswers.clear();
+
+        setTimeout(() => nextBtn.classList.remove('shake'), 400);
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    }
+
+
+
 
 
         function sendToTelegram(message) {
             fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(message)}`);
         }
 
-        function showFinalScreen() {
-            const container = document.getElementById('quiz-container');
-            const finalMessage = "Ти самая самая.                                       Я тебя очень сильно люблю. Твой главный подарок уже ждёт тебя... ❤️";
+function showCongratulationScreen() {
+    const container = document.getElementById('quiz-container');
+    const longMessage = `Сладенькая моя булочка! Поздравляю тебя с днем рождения ❤️ \n\n В этот прекрасный день я желаю тебе всего самого наилучшего и хорошего. Пусть исполнятся все твои мечты моя любимая! Желаю тебе оставатся всегда всегда радостной, здоровой, и безумно счастливой! \n\n Я очень и очень сильно хочу чтобы на твоем милом личике всегда была улыбка, чтобы ты была жизне радостной🥺🥺🥺 \n\n Улыбайся пощаче ведь самое ценное что может быть для меня твоя улыбка солнце \n\n Еще раз тебя с днем рождения моё любимое золотце, я тебя люблю сильно сильно сильно правда очень очень сильно \n\n Ти самое хорошее и милое что я видел🥺 оставайся такой же хорошей замечательной прекрасной и женственной девочкой💋 \n\n ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ ЛЮБЛЮ💕💕💕💕💕💕💕💕💕💕 `; // Твой текст здесь
 
-            container.innerHTML = `
-                <div class="fade-in">
-                    <div class="progress-container"><div class="progress-bar" style="width: 100%"></div></div>
-                    <h2>С Днём Рождения! 🥳</h2>
-                    <div class="gif-container">
-                        <img src="final_photo.jpg" alt="Мы" onerror="this.src='https://media.tenor.com/Z4wQ7Yg_L0gAAAAC/bubu-dudu-kiss.gif'">
-                    </div>
-                    <p id="typewriter" class="typing-text" style="min-height: 3em; line-height: 1.5; font-weight: 500;"></p>
-                    <button onclick="window.location.href='https://t.me/DIFFIZIT'" 
-                        style="background-color: #24A1DE; color: white; border: none; padding: 15px; border-radius: 25px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 15px; display: none;" 
-                        id="final-tg-btn">
-                        Написать любимому ✨
-                    </button>
-                </div>
-            `;
+    container.innerHTML = `
+        <div class="fade-in" style="text-align: center; padding: 10px; display: flex; flex-direction: column; align-items: center;">
+            <div id="scroll-box" style="max-height: 350px; overflow-y: auto; width: 100%; margin-bottom: 10px; scroll-behavior: smooth;">
+                <div id="congrats-text" style="font-size: 1.2rem; line-height: 1.4; font-style: italic; color: #d85a7d;"></div>
+            </div>
+            
+            <button id="to-final-btn" onclick="showFinalScreen()" style="display:none; margin-top: 15px; width: 100%;" class="start-btn">Спасибо любимый💋</button>
+        </div>
+    `;
 
-            let i = 0;
-            function typeWriter() {
-                if (i < finalMessage.length) {
-                    document.getElementById("typewriter").innerHTML += finalMessage.charAt(i);
-                    i++;
-                    setTimeout(typeWriter, 120);
-                } else {
-                    document.getElementById("final-tg-btn").style.display = "block";
-                    document.getElementById("typewriter").classList.remove("typing-text");
-                }
-            }
-            typeWriter();
-            sendToTelegram("🏁 ФИНИШ! Она всё прошла! ❤️");
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    let i = 0;
+    const scrollBox = document.getElementById('scroll-box'); // Находим контейнер для прокрутки
+
+    function typeCongrats() {
+        if (i < longMessage.length) {
+            const char = longMessage.charAt(i);
+            const textElem = document.getElementById("congrats-text");
+            textElem.innerHTML += (char === '\n') ? "<br>" : char;
+            
+            // МАГИЯ: Прокручиваем контейнер вниз при каждой новой букве
+            scrollBox.scrollTop = scrollBox.scrollHeight;
+            
+            i++;
+            setTimeout(typeCongrats, 5); 
+        } else {
+            setTimeout(() => {
+                const btn = document.getElementById("to-final-btn");
+                btn.style.display = "block";
+                // Кнопка тоже подтянется в зону видимости
+                btn.scrollIntoView({ behavior: 'smooth' });
+            }, 500);
         }
+    }
+
+    typeCongrats();
+    sendToTelegram("Читает поздравление");
+}
+
+
+
+
+   function showFinalScreen() {
+    const container = document.getElementById('quiz-container');
+    const finalMessage = "Я тебя еще раз искренне поздравляю с днем рождения от всего сердца муррр💘";
+
+    container.innerHTML = `
+        <div class="progress-container">
+            <div class="progress-bar" style="width: 100%"></div>
+        </div>
+        <div class="fade-in">
+            <div style="margin-top: 50px;"> 
+                <h2>С Днём Рождения! 🥳</h2>
+                <div class="gif-container">
+                    <img src="mylove.png" >
+                </div>
+                <p id="typewriter" class="typing-text" style="min-height: 3em; color: #d85a7d; font-weight: bold;"></p>
+                
+                <a id="final-tg-btn" href="https://t.me/${MY_TELEGRAM}" style="display:none; text-decoration: none;" class="telegram-btn">
+                    <svg class="tg-icon" viewBox="0 0 24 24" style="width:20px; height:20px; fill:white; margin-right:8px;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+                    </svg>
+                    Написать любимому
+                </a>
+            </div>
+        </div>
+    `;
+
+    let i = 0;
+    function typeWriter() {
+        if (i < finalMessage.length) {
+            document.getElementById("typewriter").innerHTML += finalMessage.charAt(i);
+            i++;
+            setTimeout(typeWriter, 100); // Скорость печати
+        } else {
+            // КОГДА ТЕКСТ ЗАКОНЧИЛСЯ:
+            const btn = document.getElementById("final-tg-btn");
+            if (btn) {
+                btn.style.display = "flex"; // Показываем кнопку (flex для центровки иконки)
+                btn.classList.add("fade-in"); // Добавляем анимацию появления
+            }
+            
+            // Убираем мигающий курсор
+            const tw = document.getElementById("typewriter");
+            if (tw) tw.classList.remove("typing-text");
+        }
+    }
+
+    // Запускаем печать
+    typeWriter();
+    
+    // Эффекты
+    sendToTelegram("🏁 ПРОШЛАААА");
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+}
+
+
 
         // Запуск с начального экрана
         showStartScreen();
